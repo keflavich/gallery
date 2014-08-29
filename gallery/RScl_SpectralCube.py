@@ -55,13 +55,15 @@ print("Signal peak: ", scube.max())
 
 # Now create a new transfer function
 # We'll use 3-sigma as our noise floor for the visualization
-tfh = ytc.auto_transfer_function([3*noise,scube.max()])
+# The 'peak' signal is kind of boring, though, so we'll cut off at ~0.4
+tfh = ytc.auto_transfer_function([3*noise,0.4])
 # The transfer function helper adds a bunch of independent layers...
 # It's not the easiest thing to understand, but there is lots of help at
 # http://yt-project.org/docs/3.0/visualizing/volume_rendering.html#transfer-functions
-tfh.tf.add_layers(15, colormap='hsv')
+tfh.tf.add_layers(10, colormap='hsv')
 
 # You can also have a look at the transfer function directly
+# (you'll need to open it with an image viewer)
 tfh.plot('transfer_function.png')
 
 # Then, let's do the projection again: this time, bigger!
@@ -70,3 +72,12 @@ tfh.plot('transfer_function.png')
 image_list_custom = ytc.quick_render_movie('RScl_QuickRender_HSV',
                                            transfer_function=tfh.tf,
                                            nframes=60, size=512)
+# https://vimeo.com/104694343
+
+# We can also pick a different camera angle
+image_list_custom_rot = ytc.quick_render_movie('RScl_QuickRender_HSV_rot',
+                                               transfer_function=tfh.tf,
+                                               camera_angle=[1,0,0],
+                                               rot_vector=[0,0,1],
+                                               nframes=60, size=512)
+# https://vimeo.com/104694599
