@@ -31,7 +31,8 @@ image_list_defaults = ytc.quick_render_movie('RScl_QuickRenderMovie_Defaults')
 
 # You can view the file: it will be called
 # 'RScl_QuickRenderMovie_Defaults/out.mp4'
-# It is also available here: https://vimeo.com/104692959
+# It is also available here:
+# https://vimeo.com/104706057
 
 # We can tweak the defaults to make a more interesting image
 # We'll first determine the noise in the image, approximately
@@ -55,12 +56,14 @@ print("Signal peak: ", scube.max())
 
 # Now create a new transfer function
 # We'll use 3-sigma as our noise floor for the visualization
-# The 'peak' signal is kind of boring, though, so we'll cut off at ~0.4
-tfh = ytc.auto_transfer_function([3*noise,0.4])
+tfh = ytc.auto_transfer_function([3*noise,scube.max()])
 # The transfer function helper adds a bunch of independent layers...
 # It's not the easiest thing to understand, but there is lots of help at
 # http://yt-project.org/docs/3.0/visualizing/volume_rendering.html#transfer-functions
-tfh.tf.add_layers(10, colormap='hsv')
+# The 'peak' signal is kind of boring, so we'll cut off at ~0.4
+tfh.tf.add_layers(6, colormap='autumn', col_bounds=[3*noise,0.4])
+# We can add another gaussian for the bright caps
+tfh.tf.sample_colormap(1.1, w=0.1, alpha=0.5, colormap='YlOrRd_r')
 
 # You can also have a look at the transfer function directly
 # (you'll need to open it with an image viewer)
@@ -72,7 +75,7 @@ tfh.plot('transfer_function.png')
 image_list_custom = ytc.quick_render_movie('RScl_QuickRender_HSV',
                                            transfer_function=tfh.tf,
                                            nframes=60, size=512)
-# https://vimeo.com/104694343
+# https://vimeo.com/104706172
 
 # We can also pick a different camera angle
 image_list_custom_rot = ytc.quick_render_movie('RScl_QuickRender_HSV_rot',
@@ -80,4 +83,4 @@ image_list_custom_rot = ytc.quick_render_movie('RScl_QuickRender_HSV_rot',
                                                camera_angle=[1,0,0],
                                                rot_vector=[0,0,1],
                                                nframes=60, size=512)
-# https://vimeo.com/104694599
+# https://vimeo.com/104706529
