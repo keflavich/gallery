@@ -10,7 +10,9 @@ from spectral_cube import SpectralCube
 cube = SpectralCube.read('Proj_131_Band3_CO.fits')
 
 # Cut out the signal-rich region of the cube
-scube = cube[11:38,172:260,172:260]
+scube = cube.with_mask(cube>0.1).minimal_subcube()
+# You could also do this manually, finding the edges by eye:
+#scube = cube[11:38,172:260,172:260]
 
 # We can look at what it contains:
 # SpectralCube with shape=(27, 88, 88):
